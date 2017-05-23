@@ -1,4 +1,4 @@
-passport Manage access credentials with R
+passport - Manage access credentials with R
 =========================================
 
 [![Build
