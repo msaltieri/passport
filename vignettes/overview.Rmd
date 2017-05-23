@@ -1,0 +1,99 @@
+---
+title: "Package passport"
+author: "Michele Stefano Altieri"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Package passport}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+  
+```{r setup, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(tidy = FALSE, comment = "#>")
+```
+
+# passport - Manage access credentials with R
+
+[![Build Status](https://travis-ci.org/msaltieri/passport.svg?branch=master)](https://travis-ci.org/msaltieri/passport)
+
+> *Copyright 2017 [Michele Stefano Altieri](http://github.com/msaltieri).
+> Licensed under the MIT license.*
+
+`passport` lets you manage username and password for databases or web services
+in order to provide full access to external resources without exposing
+credential within the code.
+
+## Table of contents
+
+- [Installation](#install)
+- [How to use](#usage)
+
+<h2 id="install">Installation</h2>
+
+`passport` is not yet available through CRAN, but you can install the latest development version from GitHub:
+
+```{r eval=FALSE}
+install.packages("devtools")
+devtools::install_github("msaltieri/passport")
+```
+
+<h2 id="usage">How to use</h2>
+
+You can handle a simple password repository by running
+
+```{r eval=FALSE}
+library(passport)
+my_vault <- new_vault(tempfile())
+my_vault
+```
+
+Then you can add your first test credentials by running
+
+```{r eval=FALSE}
+proxy1_set <- list(service   = "postgres",
+                   host      = "my_istance.dbserver.com",
+                   port      = "5432",
+                   username  = "admin",
+                   password  = "12345")
+vault_add(my_vault, proxy1_set)
+my_vault
+```
+
+Then maybe you can even add a second set of credentials
+    
+```{r eval=FALSE}
+proxy2_set <- list(service   = "data_provider",
+                   host      = "ftp://download.data_provider.com",
+                   port      = "22",
+                   username  = "alice",
+                   password  = "67890")
+vault_add(my_vault, proxy2_set)
+my_vault
+```
+    
+It's now easy to retrieve data from the vault by service name
+
+```{r eval=FALSE}
+vault_get(my_vault, "postgres")
+```    
+    
+Or maybe showing all the credential stored in the vault with just one command
+
+```{r eval=FALSE}
+vault_getall(my_vault)
+```
+
+If you need to delete a specific set of credentials, just run
+
+```{r eval=FALSE}
+vault_rm(my_vault, "postgres")
+my_vault
+```
+
+You can erase completely the vault and all the data stored inside by running
+
+```{r eval=FALSE}
+vault_delete(my_vault)
+my_vault
+```
