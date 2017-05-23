@@ -30,18 +30,26 @@ new_vault <- function(filename) {
 #' @export
 #' @keywords internal
 print.passport <- function(x, ...) {
-    if (!file.exists(vault_filename(x)))
-        stop("vault removed",
-             call. = FALSE)
-    cat("Passport Vault `",
-        basename(vault_filename(x)), "`",
-        "\n", sep = "")
-    cat("Service list:",
-        "\n\t", sep = "")
-    utils::write.table(x = vault_services(x),
-                       col.names = FALSE,
-                       quote = FALSE,
-                       eol = "\n\t")
+    if (!file.exists(vault_filename(x))) {
+        cat("Vault removed",
+            "\n", sep = "")
+    } else {
+        cat("Passport Vault `",
+            basename(vault_filename(x)), "`",
+            "\n", sep = "")
+        if (length(vault_services(x))) {
+            cat("Service list:",
+                "\n\t", sep = "")
+            utils::write.table(x = vault_services(x),
+                               col.names = FALSE,
+                               quote = FALSE,
+                               sep = " - ",
+                               eol = "\n\t")
+        } else {
+            cat("Empty vault",
+                "\n", sep = "")
+        }
+    }
 }
 
 #' Get the vault filename
